@@ -1,16 +1,4 @@
 # Art generative project - spam_mails 
-<<<<<<< Updated upstream
-Dans le cadre de la partie art génératif de notre planning, nous réalisons un programme permettant de transformer les spams d'une boîte mail en une œuvre artistique générée par notre machine à partir des données reçues.
-
-## Données utilisables :
-Longueur des mots, liens contenus dans le mail, taille du mail, mail de l'expéditeur, IP du serveur de l'expéditeur, les pièces jointes, l'heure d'envoi, et bien plus encore...
-
-## Données traitées dans notre projet: 
-Voici les données que nous utilisons actuellement dans les mails reçus : <br>
-Liens contenus dans le mail, pièces jointes & script cachés
-
-## Outils utilisés
-=======
 
 Script for filter spam mails and recover some informations about the spam
 
@@ -43,4 +31,3 @@ Je me suis donc rendu sur make.com afin de créer un mailhook qui récéptionner
 Afin de pouvoir communiquer directement avec notre serveur express (Node.JS ) local, nous utilisons ngrok qui sert de tunnel entre Make et mon localhost. Cela va pouvoir permettre à Make via une requête HTTP d'envoyer le mail directement sur mon serveur local.
 
 ![Schéma de la redirection des mails](/assets/images/redirection_schema.png)
->>>>>>> Stashed changes
