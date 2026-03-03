@@ -1,0 +1,25 @@
+{
+  "dependencies": {
+    "express": "^5.2.1",
+    "mailparse": "^2.2.2"
+  },
+  "name": "spam_art_generatif",
+  "version": "1.0.0",
+  "description": "Script for filter spam mails and recover some informations about the spam",
+  "main": "webhook-mail.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/OrifIntersection/spam_mails.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/OrifIntersection/spam_mails/issues"
+  },
+  "homepage": "https://github.com/OrifIntersection/spam_mails#readme"
+}
