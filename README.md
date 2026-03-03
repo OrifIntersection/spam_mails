@@ -18,11 +18,12 @@ Liens contenus dans le mail, pièces jointes & script cachés
 
 **Liens, scripts, pièces jointes...** : Nous utilisons un regex et recherchons des mots clés afin de déterminer si un mail contient ou non des liens/scripts.
 
-**Bienveillance du mail** : Un appel à une API nous permet de filtrer la bienveillance du mail. 
+**Bienveillance du mail** : Un appel à une API nous permet de filtrer la bienveillance du mail.
 
 ## Itinéraire de nos données
+Voici l'itinéraire complet de nos données, en premier temps, nous devrons réceptionner le mail afin de pouvoir en extraire les données. Nous procédons à une redirection de mail afin de automatiser au maximum le processus.
 
-## Redirection du mail
+### Redirection du mail
 Le principe de base était d'automatiser la procédure d'analyse afin que le processus puisse fonctionner en effectuant le moins de tâches possibles. 
 #### V1
 Dans un premier temps, nous devrons lancer notre serveur Node.JS, [ngrok](https://ngrok.com/) en local ainsi que le scénario de [Make](https://eu1.make.com/) en distant afin d'établir une connexion entre les différents services.
