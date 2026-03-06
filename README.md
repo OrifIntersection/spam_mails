@@ -9,7 +9,29 @@ Longueur des mots, liens contenus dans le mail, taille du mail, mail de l'expéd
 
 Voici les données que nous traitons actuellement dans les mails reçus :
 
-Liens contenus dans le mail, pièces jointes & script cachés
+Liens contenus dans le mail, pièces jointes & script cachés...
+{
+  "id": "1772790547513-vc3u4e",
+  "date_reception": "2026-03-06T09:49:07.555Z",
+  "sujet": "Fwd: Plus que 7 jours pour gagner 100 €",
+  "expediteur": "yaelfavre22@gmail.com",
+  "destinataires": [],
+  "date_envoi": "2026-03-06T09:49:07.127Z",
+  "return_path": "<yaelfavre22@gmail.com>",
+  "a_texte": true,
+  "a_html": true,
+  "taille_texte": 6538,
+  "liens": [],
+  "pieces_jointes": [],
+  "suspect": {
+    "liens_raccourcis": false,
+    "urls_ip": false,
+    "mots_urgence": false,
+    "points_exclamation": 0,
+    "majuscules": 10
+  },
+  "score_agressivite": 30
+}
 
 ##  Possibilités coté JavaScript :
 
