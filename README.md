@@ -10,6 +10,7 @@ Longueur des mots, liens contenus dans le mail, taille du mail, mail de l'expéd
 Voici les données que nous traitons actuellement dans les mails reçus :
 
 Liens contenus dans le mail, pièces jointes & script cachés...
+<br>
 {
   "id": "1772790547513-vc3u4e",
   "date_reception": "2026-03-06T09:49:07.555Z",
