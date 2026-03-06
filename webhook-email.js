@@ -2,10 +2,16 @@
 // SERVEUR WEBHOOK POUR RECEPTION D'EMAILS
 // ============================================
 
+//  Initialisation des paquets installés
 const express = require('express');
 const { simpleParser } = require('mailparser');
 const fs = require('fs');
 const path = require('path');
+const winkNLP = require('wink-nlp');
+const model = require('wink-eng-lite-web-model');
+const nlp = winkNLP(model);
+const its = nlp.its;
+const comme = nlp.as .as;   // as.text
 
 // Initialisation
 const app = express();
@@ -14,10 +20,13 @@ const PORT = 3000;
 // Dossiers pour sauvegarder les fichiers
 const DOSSIER_EML = path.join(__dirname, 'emails_bruts');
 const DOSSIER_ANALYSES = path.join(__dirname, 'analyses');
+const DOSSIER_TEXTES = path.join(__dirname, 'textes')
 
 // Créer les dossiers s'ils n'existent pas
 if (!fs.existsSync(DOSSIER_EML)) fs.mkdirSync(DOSSIER_EML);
 if (!fs.existsSync(DOSSIER_ANALYSES)) fs.mkdirSync(DOSSIER_ANALYSES);
+if (!fs.existsSync(DOSSIER_TEXTES)) fs.mkdirSync(DOSSIER_TEXTES);
+
 
 function deepParseJSON(value) {
   if (typeof value === "string") {
@@ -73,6 +82,7 @@ app.post('/webhook-email', async (req, res) => {
     // ========================================
     // 1. SAUVEGARDE EN .EML
     // ========================================
+    // • Dossier "emails_bruts"
     const cheminEML = path.join(DOSSIER_EML, `email-${id}.eml`);
     fs.writeFileSync(cheminEML, emailBrut);
     console.log(`   ✅ Sauvegardé: ${cheminEML}`);
@@ -144,15 +154,30 @@ app.post('/webhook-email', async (req, res) => {
     // ========================================
     // 3. SAUVEGARDER L'ANALYSE EN JSON
     // ========================================
+    
+    // • Dossier "analyse"
     const cheminAnalyse = path.join(DOSSIER_ANALYSES, `analyse-${id}.json`);
-    fs.writeFileSync(cheminAnalyse, JSON.stringify(analyse, null, 2));
+    fs.writeFileSync(cheminAnalyse, JSON.stringify(mail.text, null, 2));
     console.log(`   ✅ Analyse sauvegardée: ${cheminAnalyse}`);
+
+    // ========================================
+    // 4. SAUVEGARDER le texte du mail
+    // ========================================
+    
+    console.log(mail.texte, "CONSOLE")
+
+    const cheminTexte = path.join(DOSSIER_TEXTES, `texte-${id}.json`);
+    fs.writeFileSync(cheminTexte, JSON.stringify(analyse, null, 2 ));
+    console.log(`   ✅ Texte sauvegardé: ${cheminTexte}`);
+
 
     // Afficher un résumé
     console.log(`   📧 Sujet: ${analyse.sujet}`);
     console.log(`   👤 De: ${analyse.expediteur}`);
     console.log(`   🔗 Liens: ${analyse.liens.length}`);
     console.log(`   📊 Score agressivité: ${analyse.score_agressivite}/100`);
+
+
 
     // Répondre au service de redirection
     res.status(200).json({
@@ -179,7 +204,8 @@ app.get('/test', (req, res) => {
     message: 'Serveur webhook actif',
     dossiers: {
       eml: DOSSIER_EML,
-      analyses: DOSSIER_ANALYSES
+      analyses: DOSSIER_ANALYSES,
+      textes : DOSSIER_TEXTES
     }
   });
 });
@@ -198,6 +224,7 @@ app.listen(PORT, () => {
 ║                                              ║
 ║  📁 Dossier EML: ${DOSSIER_EML}    ║
 ║  📁 Dossier analyses: ${DOSSIER_ANALYSES} ║
+║  📁 Dossier textes: ${DOSSIER_TEXTES} ║
 ╚══════════════════════════════════════════════╝
   `);
 });

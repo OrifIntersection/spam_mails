@@ -1,8 +1,11 @@
 {
   "dependencies": {
+    "browserify": "^17.0.1",
     "express": "^5.2.1",
     "mailparse": "^2.2.2",
-    "mailparser": "^3.9.3"
+    "mailparser": "^3.9.3",
+    "wink-eng-lite-web-model": "^1.8.1",
+    "wink-nlp": "^2.4.0"
   },
   "name": "spam_art_generatif",
   "version": "1.0.0",
