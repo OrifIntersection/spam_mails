@@ -13,11 +13,13 @@ const PORT = 3000;
 
 // Dossiers pour sauvegarder les fichiers
 const DOSSIER_EML = path.join(__dirname, 'emails_bruts');
-const DOSSIER_ANALYSES = path.join(__dirname, 'analyses');
+const DOSSIER_ANALYSES = path.join(__dirname, 'analyses'); 
+const DOSSIER_TEXTES = path.join(__dirname, 'textes')
 
 // Créer les dossiers s'ils n'existent pas
 if (!fs.existsSync(DOSSIER_EML)) fs.mkdirSync(DOSSIER_EML);
 if (!fs.existsSync(DOSSIER_ANALYSES)) fs.mkdirSync(DOSSIER_ANALYSES);
+if (!fs.existsSync(DOSSIER_TEXTES)) fs.mkdirSync(DOSSIER_TEXTES);
 
 function deepParseJSON(value) {
   if (typeof value === "string") {
@@ -140,6 +142,13 @@ app.post('/webhook-email', async (req, res) => {
       (analyse.suspect.mots_urgence ? 20 : 0),
       100
     );
+    // ========================================
+    // 3. SAUVEGARDER LE TEXTE
+    // ========================================
+    const cheminTexte = path.join(DOSSIER_TEXTES, `texte-${id}.json`)
+    fs.writeFileSync(cheminTexte, JSON.stringify(analyse, null, 2));
+    console.log(`   ✅ Analyse sauvegardée: ${cheminTexte}`);
+
 
     // ========================================
     // 3. SAUVEGARDER L'ANALYSE EN JSON
@@ -179,7 +188,8 @@ app.get('/test', (req, res) => {
     message: 'Serveur webhook actif',
     dossiers: {
       eml: DOSSIER_EML,
-      analyses: DOSSIER_ANALYSES
+      analyses: DOSSIER_ANALYSES,
+      textes: DOSSIER_TEXTES
     }
   });
 });
@@ -189,15 +199,16 @@ app.get('/test', (req, res) => {
 // ============================================
 app.listen(PORT, () => {
   console.log(`
-╔══════════════════════════════════════════════╗
-║  SERVEUR WEBHOOK DÉMARRÉ                     ║
-╠══════════════════════════════════════════════╣
-║  📡 URL locale: http://localhost:${PORT}       ║
-║  🧪 Test: http://localhost:${PORT}/test        ║
-║  📥 Webhook: http://localhost:${PORT}/webhook-email ║
-║                                              ║
-║  📁 Dossier EML: ${DOSSIER_EML}    ║
-║  📁 Dossier analyses: ${DOSSIER_ANALYSES} ║
-╚══════════════════════════════════════════════╝
+╔═══════════════════════════════════════════════════════╗
+║  SERVEUR WEBHOOK DÉMARRÉ                              ║
+╠═══════════════════════════════════════════════════════╣
+║  📡 URL locale: http://localhost:${PORT}       
+║  🧪 Test: http://localhost:${PORT}/test        
+║  📥 Webhook: http://localhost:${PORT}/webhook-email 
+║                                              
+║  📁 Dossier EML: ${DOSSIER_EML}    
+║  📁 Dossier analyses: ${DOSSIER_ANALYSES} 
+║  📁 Dossier textes: ${DOSSIER_TEXTES}
+╚═══════════════════════════════════════════════════════╝
   `);
 });
