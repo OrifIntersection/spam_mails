@@ -40,7 +40,9 @@ Liens contenus dans le mail, pièces jointes & script cachés...
 
 **Liens, scripts, pièces jointes...** : Nous utilisons un regex et recherchons des mots clés afin de déterminer si un mail contient ou non des liens/scripts.
 
-**Bienveillance du mail** : Un appel à une API IA externe nous permettrait de filtrer la bienveillance du mail. Cependant afin de maintenir la confidentialité de nos mails, nous installons une librairie afin de traiter les données en local.
+**Bienveillance du mail** : Un appel à une API ou une IA externe nous permettrait de filtrer la bienveillance du mail. Cependant afin de maintenir la confidentialité de nos mails, nous installons une librairie afin de traiter les données en local.
+
+## Librairies utilisées: mailparser, mailparse, express, node-nlp et csv-parser
 
 ## Itinéraire de nos données
 Voici l'itinéraire complet de nos données, en premier temps, nous devrons réceptionner le mail afin de pouvoir en extraire les données. Nous procédons à une redirection de mail afin d'automatiser au maximum le processus.
