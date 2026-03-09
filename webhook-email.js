@@ -182,11 +182,11 @@ app.post('/webhook-email', async (req, res) => {
     const readabilityStats = doc.out(its.readabilityStats);
 
     const readabilityStatstexte = readabilityStats.fres
-    const readabilityStatstexteTimeMins = readabilityStats.readingTimeMins
-    const readabilityStatstexteTimeSec = readabilityStats.TimeSecs
-    const readabilityStatstexteSentiment = readabilityStats.sentiment
-    const readabilityStatstexteWordCount = readabilityStats.numOfWords
-    const readabilityStatstexteSentenceCount = readabilityStats.numOfSentences
+    const readabilityStatsTimeMins = readabilityStats.readingTimeMins
+    const readabilityStatsTimeSec = readabilityStats.TimeSecs
+    const readabilityStatsSentiment = readabilityStats.sentiment
+    const readabilityStatsWordCount = readabilityStats.numOfWords
+    const readabilityStatsSentenceCount = readabilityStats.numOfSentences
 
     const complexWords = readabilityStats.complexWords;
     let complexWordsList = [];
@@ -194,38 +194,35 @@ app.post('/webhook-email', async (req, res) => {
       complexWordsList.push(word.toLowerCase());
     };
 
-    // Traitement du texte pour surligner les mots complexes
-    const textList = textInput.split(' ');
+    const textList = textWinkInput.split(' ');
     textList.forEach((word, idx) => {
+      // Nettoyer le mot en supprimant les caractères spéciaux
       const cleanWord = word.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g, '');
+
+      // Vérifier si la version nettoyée du mot (en minuscules) est dans la liste des mots complexes
       if (complexWordsList.includes(cleanWord.toLowerCase())) {
+        // Remplacer par le mot original (avec ses caractères spéciaux) mais avec la balise HTML
         textList[idx] = `<span class="complex-word">${word}</span>`
       };
     });
-    // Fichier JSON à envoyer
+
+    // Reconstruction du texte avec les mots complexes surlignés
+    const textWithHighlightedComplexWords = textList.join(' ');
 
     const textesStats = {
-      // Statistiques de base
-      flesch_reading_score: readabilityStats.fres,
+      flesch_reading_score: readabilityStatstexte,
       reading_time: {
-        minutes: readabilityStatstexteTimeMins,
-        seconds: readabilityStatstexteTimeSec
+        minutes: readabilityStatsTimeMins,
+        seconds: readabilityStatsTimeSec
       },
-      sentiment: readabilityStatstexteSentiment,
-      word_count: readabilityStatstexteWordCount,
-      sentence_count: readabilityStatstexteSentenceCount,
-
-      // Données sur les mots complexes
+      sentiment: readabilityStatsSentiment,
+      word_count: readabilityStatsWordCount,
+      sentence_count: readabilityStatsSentenceCount,
+      // Ajout des données sur les mots complexes
       complex_words: {
         list: complexWordsList,
         count: complexWordsList.length,
-        percentage: ((complexWordsList.length / readabilityStatstexteWordCount) * 100).toFixed(2) + '%'
-      },
-
-      // Texte avec mise en évidence
-      text_analysis: {
-        original: textWinkInput,
-        with_highlight: textList.join(' ')
+        highlighted_text: textWithHighlightedComplexWords
       }
     };
 
@@ -286,10 +283,10 @@ app.listen(PORT, () => {
 ║  🧪 Test: http://localhost:${PORT}/test        
 ║  📥 Webhook: http://localhost:${PORT}/webhook-email 
 ║                                              
-║  📁 Dossier EML: ${DOSSIER_EML}    
-║  📁 Dossier analyses: ${DOSSIER_ANALYSES} 
-║  📁 Dossier textes: ${DOSSIER_TEXTES} 
-║  📁 Dossier WinkNLP: ${DOSSIER_WINKNLP} 
+║  📁 Dossier EML: ${DOSSIER_EML}
+║  📁 Dossier analyses: ${DOSSIER_ANALYSES}
+║  📁 Dossier textes: ${DOSSIER_TEXTES}
+║  📁 Dossier WinkNLP: ${DOSSIER_WINKNLP}
 ╚══════════════════════════════════════════════════════╝
   `);
 });
