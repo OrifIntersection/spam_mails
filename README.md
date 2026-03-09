@@ -59,4 +59,4 @@ Afin de pouvoir communiquer directement avec notre serveur express (Node.JS ) lo
 
 
 ### Emotions du mail
-Afin de filtrer les émotions du mail, nous utilisons un [NLP](https://www.ibm.com/fr-fr/think/topics/natural-language-processing). Après avoir comparé plusieurs NLP, l'outil utilisé sera [...](https://ngrok.com/)  .
+Afin de filtrer les émotions du mail, nous utilisons un [NLP](https://www.ibm.com/fr-fr/think/topics/natural-language-processing). Après avoir comparé plusieurs NLP, l'outil utilisé sera [node-nlp](https://www.npmjs.com/package/node-nlp).
