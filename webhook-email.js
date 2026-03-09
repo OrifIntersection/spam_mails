@@ -11,7 +11,7 @@ const winkNLP = require('wink-nlp');
 const model = require('wink-eng-lite-web-model');
 const nlp = winkNLP(model);
 const its = nlp.its;
-const comme = nlp.as .as;   // as.text
+const comme = nlp.as.as;   // as.text
 
 // Initialisation
 const app = express();
@@ -20,12 +20,16 @@ const PORT = 3000;
 // Dossiers pour sauvegarder les fichiers
 const DOSSIER_EML = path.join(__dirname, 'emails_bruts');
 const DOSSIER_ANALYSES = path.join(__dirname, 'analyses');
-const DOSSIER_TEXTES = path.join(__dirname, 'textes')
+const DOSSIER_TEXTES = path.join(__dirname, 'textes');
+const DOSSIER_WINKNLP = path.join(__dirname, 'Wink');
+
 
 // Créer les dossiers s'ils n'existent pas
 if (!fs.existsSync(DOSSIER_EML)) fs.mkdirSync(DOSSIER_EML);
 if (!fs.existsSync(DOSSIER_ANALYSES)) fs.mkdirSync(DOSSIER_ANALYSES);
 if (!fs.existsSync(DOSSIER_TEXTES)) fs.mkdirSync(DOSSIER_TEXTES);
+if (!fs.existsSync(DOSSIER_WINKNLP)) fs.mkdirSync(DOSSIER_WINKNLP);
+
 
 
 function deepParseJSON(value) {
@@ -154,30 +158,90 @@ app.post('/webhook-email', async (req, res) => {
     // ========================================
     // 3. SAUVEGARDER L'ANALYSE EN JSON
     // ========================================
-    
+
     // • Dossier "analyse"
     const cheminAnalyse = path.join(DOSSIER_ANALYSES, `analyse-${id}.json`);
-    fs.writeFileSync(cheminAnalyse, JSON.stringify(mail.text, null, 2));
+    fs.writeFileSync(cheminAnalyse, JSON.stringify(analyse, null, 2));
     console.log(`   ✅ Analyse sauvegardée: ${cheminAnalyse}`);
 
     // ========================================
     // 4. SAUVEGARDER le texte du mail
     // ========================================
-    
-    console.log(mail.texte, "CONSOLE")
 
     const cheminTexte = path.join(DOSSIER_TEXTES, `texte-${id}.json`);
-    fs.writeFileSync(cheminTexte, JSON.stringify(analyse, null, 2 ));
+    fs.writeFileSync(cheminTexte, JSON.stringify(mail.text, null, 2));
     console.log(`   ✅ Texte sauvegardé: ${cheminTexte}`);
 
+    // ========================================
+    // 5. Wink NLP 
+    // ========================================
+    const textWinkInput = mail.text
+
+    const doc = nlp.readDoc(textWinkInput);
+
+    const readabilityStats = doc.out(its.readabilityStats);
+
+    const readabilityStatstexte = readabilityStats.fres
+    const readabilityStatstexteTimeMins = readabilityStats.readingTimeMins
+    const readabilityStatstexteTimeSec = readabilityStats.TimeSecs
+    const readabilityStatstexteSentiment = readabilityStats.sentiment
+    const readabilityStatstexteWordCount = readabilityStats.numOfWords
+    const readabilityStatstexteSentenceCount = readabilityStats.numOfSentences
+
+    const complexWords = readabilityStats.complexWords;
+    let complexWordsList = [];
+    for (let word in complexWords) {
+      complexWordsList.push(word.toLowerCase());
+    };
+
+    // Traitement du texte pour surligner les mots complexes
+    const textList = textInput.split(' ');
+    textList.forEach((word, idx) => {
+      const cleanWord = word.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g, '');
+      if (complexWordsList.includes(cleanWord.toLowerCase())) {
+        textList[idx] = `<span class="complex-word">${word}</span>`
+      };
+    });
+    // Fichier JSON à envoyer
+
+    const textesStats = {
+      // Statistiques de base
+      flesch_reading_score: readabilityStats.fres,
+      reading_time: {
+        minutes: readabilityStatstexteTimeMins,
+        seconds: readabilityStatstexteTimeSec
+      },
+      sentiment: readabilityStatstexteSentiment,
+      word_count: readabilityStatstexteWordCount,
+      sentence_count: readabilityStatstexteSentenceCount,
+
+      // Données sur les mots complexes
+      complex_words: {
+        list: complexWordsList,
+        count: complexWordsList.length,
+        percentage: ((complexWordsList.length / readabilityStatstexteWordCount) * 100).toFixed(2) + '%'
+      },
+
+      // Texte avec mise en évidence
+      text_analysis: {
+        original: textWinkInput,
+        with_highlight: textList.join(' ')
+      }
+    };
+
+    // ========================================
+    // 4. SAUVEGARDER l'analyse de Wink NLP
+    // ========================================
+
+    const cheminWink = path.join(DOSSIER_WINKNLP, `texte-${id}.json`);
+    fs.writeFileSync(cheminWink, JSON.stringify(textesStats, null, 2));
+    console.log(`   ✅ Wink sauvegardé: ${cheminWink}`);
 
     // Afficher un résumé
     console.log(`   📧 Sujet: ${analyse.sujet}`);
     console.log(`   👤 De: ${analyse.expediteur}`);
     console.log(`   🔗 Liens: ${analyse.liens.length}`);
     console.log(`   📊 Score agressivité: ${analyse.score_agressivite}/100`);
-
-
 
     // Répondre au service de redirection
     res.status(200).json({
@@ -205,7 +269,7 @@ app.get('/test', (req, res) => {
     dossiers: {
       eml: DOSSIER_EML,
       analyses: DOSSIER_ANALYSES,
-      textes : DOSSIER_TEXTES
+      textes: DOSSIER_TEXTES
     }
   });
 });
@@ -215,16 +279,17 @@ app.get('/test', (req, res) => {
 // ============================================
 app.listen(PORT, () => {
   console.log(`
-╔══════════════════════════════════════════════╗
-║  SERVEUR WEBHOOK DÉMARRÉ                     ║
-╠══════════════════════════════════════════════╣
-║  📡 URL locale: http://localhost:${PORT}       ║
-║  🧪 Test: http://localhost:${PORT}/test        ║
-║  📥 Webhook: http://localhost:${PORT}/webhook-email ║
-║                                              ║
-║  📁 Dossier EML: ${DOSSIER_EML}    ║
-║  📁 Dossier analyses: ${DOSSIER_ANALYSES} ║
-║  📁 Dossier textes: ${DOSSIER_TEXTES} ║
-╚══════════════════════════════════════════════╝
+╔══════════════════════════════════════════════════════╗
+║  SERVEUR WEBHOOK DÉMARRÉ                             ║
+╠══════════════════════════════════════════════════════╣
+║  📡 URL locale: http://localhost:${PORT}       
+║  🧪 Test: http://localhost:${PORT}/test        
+║  📥 Webhook: http://localhost:${PORT}/webhook-email 
+║                                              
+║  📁 Dossier EML: ${DOSSIER_EML}    
+║  📁 Dossier analyses: ${DOSSIER_ANALYSES} 
+║  📁 Dossier textes: ${DOSSIER_TEXTES} 
+║  📁 Dossier WinkNLP: ${DOSSIER_WINKNLP} 
+╚══════════════════════════════════════════════════════╝
   `);
 });
