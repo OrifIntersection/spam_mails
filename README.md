@@ -66,6 +66,7 @@ Plus précisément, une partie du NLP (Traitement Automatique du Langage Naturel
   
 - Le [NLG](https://www.ibm.com/think/topics/natural-language-generation) (Natural Language Generation) : c'est le processus inverse, qui sert à ce que l'ordinateur génère des phrases et un langage compréhensibles par nous, les humains, à  partir de données structurées.
 
+Dans notre cas, comme nous utiliserons directement les données extraites, nous n'aurons pas besoin de demander à l'ordinateur de formuler des phrases.
 Après avoir comparé plusieurs NLP, l'outil utilisé sera [node-nlp](https://www.npmjs.com/package/node-nlp).
 #### Comment ca fonctionne
 - Il comprend le français
