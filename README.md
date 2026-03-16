@@ -70,5 +70,5 @@ Dans notre cas, comme nous utiliserons directement les données extraites, nous 
 Après avoir comparé plusieurs NLP, l'outil utilisé sera [node-nlp](https://www.npmjs.com/package/node-nlp).
 #### Comment ca fonctionne
 - Il comprend le français
-- Il est complet et permet le [word embedding](https://www.ibm.com/think/topics/word-embeddings) et le [token embedding](https://nkalra0123.medium.com/token-embeddings-what-they-are-why-they-matter-and-how-to-build-them-with-working-code-c42d152f6877) [embedding avec des tokens](https://www.ionos.fr/digitalguide/sites-internet/developpement-web/les-token-ia/)
+- Il est complet et permet le [word embedding](https://www.ibm.com/think/topics/word-embeddings) et le [token embedding](https://nkalra0123.medium.com/token-embeddings-what-they-are-why-they-matter-and-how-to-build-them-with-working-code-c42d152f6877) qui consiste à faire de l'[embedding avec des tokens](https://www.ionos.fr/digitalguide/sites-internet/developpement-web/les-token-ia/)
 - En cas de problèmne, il exécutera le fallback qui utilisera une méthode [rule-based](https://en.wikipedia.org/wiki/Rule-based_machine_learning)
