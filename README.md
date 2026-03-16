@@ -62,9 +62,9 @@ Afin de pouvoir communiquer directement avec notre serveur express (Node.JS ) lo
 Afin de filtrer les émotions du mail, nous utilisons un [NLP](https://www.ibm.com/fr-fr/think/topics/natural-language-processing). 
 Plus précisément, une partie du NLP (Traitement Automatique du Langage Naturel), le [NLU](https://www.ibm.com/fr-fr/think/topics/natural-language-understanding). Le NLP est composé de deux sous-domaines principaux et complémentaires :
 
-Le [NLU](https://www.ibm.com/fr-fr/think/topics/natural-language-understanding) (Natural Language Understanding) : c'est le processus par lequel l'ordinateur, dont le langage natif est le code binaire (les 0 et les 1), comprend le langage humain. Le NLU va au-delà des simples mots pour saisir le sens, le contexte et l'intention de ce qui est dit ou écrit.
-
-Le [NLG](https://www.ibm.com/think/topics/natural-language-generation) (Natural Language Generation) : c'est le processus inverse, qui sert à ce que l'ordinateur génère des phrases et un langage compréhensibles par nous, les humains, à partir de données structurées.
+- Le [NLU](https://www.ibm.com/fr-fr/think/topics/natural-language-understanding) (Natural Language Understanding) : c'est le processus par lequel l'ordinateur, dont le langage natif est le code binaire (les 0 et les 1), comprend le langage humain. Le NLU va au-delà des simples mots pour saisir le sens, le contexte et l'intention de ce qui est dit ou écrit.
+  
+- Le [NLG](https://www.ibm.com/think/topics/natural-language-generation) (Natural Language Generation) : c'est le processus inverse, qui sert à ce que l'ordinateur génère des phrases et un langage compréhensibles par nous, les humains, à  partir de données structurées.
 
 Après avoir comparé plusieurs NLP, l'outil utilisé sera [node-nlp](https://www.npmjs.com/package/node-nlp).
 #### Comment ca fonctionne
