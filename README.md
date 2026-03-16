@@ -60,7 +60,7 @@ Afin de pouvoir communiquer directement avec notre serveur express (Node.JS ) lo
 
 ### Emotions du mail
 Afin de filtrer les émotions du mail, nous utilisons un [NLP](https://www.ibm.com/fr-fr/think/topics/natural-language-processing). 
-Plus précisément, une partie du NLP (Traitement Automatique du Langage Naturel). Le NLP est composé de deux sous-domaines principaux et complémentaires :
+Plus précisément, une partie du NLP (Traitement Automatique du Langage Naturel), le [NLU](https://www.ibm.com/fr-fr/think/topics/natural-language-understanding). Le NLP est composé de deux sous-domaines principaux et complémentaires :
 
 Le [NLU](https://www.ibm.com/fr-fr/think/topics/natural-language-understanding) (Natural Language Understanding) : c'est le processus par lequel l'ordinateur, dont le langage natif est le code binaire (les 0 et les 1), comprend le langage humain. Le NLU va au-delà des simples mots pour saisir le sens, le contexte et l'intention de ce qui est dit ou écrit.
 
