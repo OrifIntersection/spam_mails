@@ -38,7 +38,7 @@ Liens contenus dans le mail, pièces jointes & script cachés...
 
 **Métadonnées** : La librairie JS [mailparser](https://nodemailer.com/extras/mailparser) nous permet de récupérer les métadonnées du mail afin de pouvoir les utiliser par la suite.
 
-**Liens, scripts, pièces jointes...** : Nous utilisons un regex et recherchons des mots clés afin de déterminer si un mail contient ou non des liens/scripts.
+**Liens, scripts, pièces jointes...** : Nous utilisons un regex et recherchons des mots clés afin de déterminer si un mail contientW ou non des liens/scripts.
 
 **Bienveillance du mail** : Un appel à une API ou une IA externe nous permettrait de filtrer la bienveillance du mail. Cependant afin de maintenir la confidentialité de nos mails, nous installons [node-nlp](https://www.npmjs.com/package/node-nlp) afin de traiter les données en local.
 
@@ -59,8 +59,15 @@ Afin de pouvoir communiquer directement avec notre serveur express (Node.JS ) lo
 
 
 ### Emotions du mail
-Afin de filtrer les émotions du mail, nous utilisons un [NLP](https://www.ibm.com/fr-fr/think/topics/natural-language-processing). Plus précisement une partie du NLP. Il sont composé du [NLU](https://www.ibm.com/fr-fr/think/topics/natural-language-understanding) et du [NLG](https://www.ibm.com/think/topics/natural-language-generation). Après avoir comparé plusieurs NLP, l'outil utilisé sera [node-nlp](https://www.npmjs.com/package/node-nlp).
+Afin de filtrer les émotions du mail, nous utilisons un [NLP](https://www.ibm.com/fr-fr/think/topics/natural-language-processing). 
+Plus précisément, une partie du NLP (Traitement Automatique du Langage Naturel). Le NLP est composé de deux sous-domaines principaux et complémentaires :
+
+Le [NLU](https://www.ibm.com/fr-fr/think/topics/natural-language-understanding) (Natural Language Understanding) : c'est le processus par lequel l'ordinateur, dont le langage natif est le code binaire (les 0 et les 1), comprend le langage humain. Le NLU va au-delà des simples mots pour saisir le sens, le contexte et l'intention de ce qui est dit ou écrit.
+
+Le [NLG](https://www.ibm.com/think/topics/natural-language-generation) (Natural Language Generation) : c'est le processus inverse, qui sert à ce que l'ordinateur génère des phrases et un langage compréhensibles par nous, les humains, à partir de données structurées.
+
+Après avoir comparé plusieurs NLP, l'outil utilisé sera [node-nlp](https://www.npmjs.com/package/node-nlp).
 #### Comment ca fonctionne
 - Il comprend le français
-- Il est complet et permet le [word embedding](https://www.ibm.com/think/topics/word-embeddings)
-- En cas de problèmne, il executera le fallback qui utilisera une méthode [rule-based](https://en.wikipedia.org/wiki/Rule-based_machine_learning)
+- Il est complet et permet le [word embedding](https://www.ibm.com/think/topics/word-embeddings) et le [token embedding](https://nkalra0123.medium.com/token-embeddings-what-they-are-why-they-matter-and-how-to-build-them-with-working-code-c42d152f6877) [embedding avec des tokens](https://www.ionos.fr/digitalguide/sites-internet/developpement-web/les-token-ia/)
+- En cas de problèmne, il exécutera le fallback qui utilisera une méthode [rule-based](https://en.wikipedia.org/wiki/Rule-based_machine_learning)
