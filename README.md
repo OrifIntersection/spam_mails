@@ -40,7 +40,7 @@ Liens contenus dans le mail, pièces jointes & script cachés...
 
 **Liens, scripts, pièces jointes...** : Nous utilisons un regex et recherchons des mots clés afin de déterminer si un mail contient ou non des liens/scripts.
 
-**Bienveillance du mail** : Un appel à une API ou une IA externe nous permettrait de filtrer la bienveillance du mail. Cependant afin de maintenir la confidentialité de nos mails, nous installons une librairie afin de traiter les données en local.
+**Bienveillance du mail** : Un appel à une API ou une IA externe nous permettrait de filtrer la bienveillance du mail. Cependant afin de maintenir la confidentialité de nos mails, nous installons [node-nlp](https://www.npmjs.com/package/node-nlp) afin de traiter les données en local.
 
 ## Librairies utilisées: mailparser, mailparse, express, node-nlp et csv-parser
 
@@ -59,4 +59,8 @@ Afin de pouvoir communiquer directement avec notre serveur express (Node.JS ) lo
 
 
 ### Emotions du mail
-Afin de filtrer les émotions du mail, nous utilisons un [NLP](https://www.ibm.com/fr-fr/think/topics/natural-language-processing). Après avoir comparé plusieurs NLP, l'outil utilisé sera [node-nlp](https://www.npmjs.com/package/node-nlp).
+Afin de filtrer les émotions du mail, nous utilisons un [NLP](https://www.ibm.com/fr-fr/think/topics/natural-language-processing). Plus précisement une partie du NLP. Il sont composé du [NLU](https://www.ibm.com/fr-fr/think/topics/natural-language-understanding) et du [NLG](https://www.ibm.com/think/topics/natural-language-generation). Après avoir comparé plusieurs NLP, l'outil utilisé sera [node-nlp](https://www.npmjs.com/package/node-nlp).
+#### Comment ca fonctionne
+- Il comprend le français
+- Il est complet et permet le [word embedding](https://www.ibm.com/think/topics/word-embeddings)
+- En cas de problèmne, il executera le fallback qui utilisera une méthode [rule-based](https://en.wikipedia.org/wiki/Rule-based_machine_learning)
