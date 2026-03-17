@@ -1,0 +1,370 @@
+{
+  "settings": {
+    "languages": [
+      "fr"
+    ],
+    "autoSave": false,
+    "tag": "nlp",
+    "threshold": 0.5,
+    "autoLoad": true,
+    "modelFileName": "model.nlp",
+    "executeActionsBeforeAnswers": false,
+    "calculateSentiment": true
+  },
+  "nluManager": {
+    "settings": {
+      "tag": "nlu-manager"
+    },
+    "locales": [
+      "fr"
+    ],
+    "languageNames": {},
+    "domainManagers": {
+      "fr": {
+        "settings": {
+          "locale": "fr",
+          "trainByDomain": false,
+          "tag": "domain-manager-fr",
+          "nluByDomain": {
+            "default": {
+              "className": "NeuralNlu",
+              "settings": {}
+            }
+          },
+          "useStemDict": true
+        },
+        "stemDict": {
+          "con,sal": {
+            "intent": "insulte",
+            "domain": "default"
+          },
+          "fair,foutr,te,va": {
+            "intent": "insulte",
+            "domain": "default"
+          },
+          "e,idiot,tu": {
+            "intent": "insulte",
+            "domain": "default"
+          },
+          "content,je,suis": {
+            "intent": "positif",
+            "domain": "default"
+          },
+          "beaucoup,merc": {
+            "intent": "positif",
+            "domain": "default"
+          },
+          "merc,sup": {
+            "intent": "positif",
+            "domain": "default"
+          },
+          "ok": {
+            "intent": "neutre",
+            "domain": "default"
+          }
+        },
+        "intentDict": {
+          "insulte": "default",
+          "positif": "default",
+          "neutre": "default"
+        },
+        "sentences": [
+          {
+            "domain": "default",
+            "utterance": "sale con",
+            "intent": "insulte"
+          },
+          {
+            "domain": "default",
+            "utterance": "va te faire foutre",
+            "intent": "insulte"
+          },
+          {
+            "domain": "default",
+            "utterance": "tu es idiot",
+            "intent": "insulte"
+          },
+          {
+            "domain": "default",
+            "utterance": "je suis content",
+            "intent": "positif"
+          },
+          {
+            "domain": "default",
+            "utterance": "merci beaucoup",
+            "intent": "positif"
+          },
+          {
+            "domain": "default",
+            "utterance": "super merci",
+            "intent": "positif"
+          },
+          {
+            "domain": "default",
+            "utterance": "ok",
+            "intent": "neutre"
+          }
+        ],
+        "domains": {
+          "master_domain": {
+            "settings": {
+              "locale": "fr",
+              "tag": "nlu-fr",
+              "keepStopwords": true,
+              "nonefeatureValue": 1,
+              "nonedeltaMultiplier": 1.2,
+              "spellCheck": false,
+              "spellCheckDistance": 1,
+              "filterZeros": true,
+              "log": true
+            },
+            "features": {
+              "sal": 1,
+              "con": 1,
+              "va": 1,
+              "te": 1,
+              "fair": 1,
+              "foutr": 1,
+              "tu": 1,
+              "e": 1,
+              "idiot": 1,
+              "je": 1,
+              "suis": 1,
+              "content": 1,
+              "merc": 1,
+              "beaucoup": 1,
+              "sup": 1,
+              "ok": 1
+            },
+            "intents": {
+              "insulte": 1,
+              "positif": 1,
+              "neutre": 1
+            },
+            "intentFeatures": {
+              "insulte": {
+                "sal": 1,
+                "con": 1,
+                "va": 1,
+                "te": 1,
+                "fair": 1,
+                "foutr": 1,
+                "tu": 1,
+                "e": 1,
+                "idiot": 1
+              },
+              "positif": {
+                "je": 1,
+                "suis": 1,
+                "content": 1,
+                "merc": 1,
+                "beaucoup": 1,
+                "sup": 1
+              },
+              "neutre": {
+                "ok": 1
+              }
+            },
+            "featuresToIntent": {
+              "sal": [
+                "insulte"
+              ],
+              "con": [
+                "insulte"
+              ],
+              "va": [
+                "insulte"
+              ],
+              "te": [
+                "insulte"
+              ],
+              "fair": [
+                "insulte"
+              ],
+              "foutr": [
+                "insulte"
+              ],
+              "tu": [
+                "insulte"
+              ],
+              "e": [
+                "insulte"
+              ],
+              "idiot": [
+                "insulte"
+              ],
+              "je": [
+                "positif"
+              ],
+              "suis": [
+                "positif"
+              ],
+              "content": [
+                "positif"
+              ],
+              "merc": [
+                "positif"
+              ],
+              "beaucoup": [
+                "positif"
+              ],
+              "sup": [
+                "positif"
+              ],
+              "ok": [
+                "neutre"
+              ]
+            },
+            "neuralNetwork": {
+              "settings": {
+                "locale": "fr",
+                "tag": "nlu-fr",
+                "keepStopwords": true,
+                "nonefeatureValue": 1,
+                "nonedeltaMultiplier": 1.2,
+                "spellCheck": false,
+                "spellCheckDistance": 1,
+                "filterZeros": true,
+                "log": true
+              },
+              "features": [
+                "sal",
+                "con",
+                "va",
+                "te",
+                "fair",
+                "foutr",
+                "tu",
+                "e",
+                "idiot",
+                "je",
+                "suis",
+                "content",
+                "merc",
+                "beaucoup",
+                "sup",
+                "ok"
+              ],
+              "intents": [
+                "insulte",
+                "positif",
+                "neutre"
+              ],
+              "perceptrons": [
+                [
+                  5.6282124519348145,
+                  5.6282124519348145,
+                  2.818568468093872,
+                  2.818568468093872,
+                  2.818568468093872,
+                  2.818568468093872,
+                  3.7563812732696533,
+                  3.7563812732696533,
+                  3.7563812732696533,
+                  -1.1050993204116821,
+                  -1.1050993204116821,
+                  -1.1050993204116821,
+                  -2.148005723953247,
+                  -1.0960874557495117,
+                  -1.0302531719207764,
+                  -2.9099693298339844,
+                  3.0024482294487322
+                ],
+                [
+                  -1.437321662902832,
+                  -1.437321662902832,
+                  -0.7930193543434143,
+                  -0.7930193543434143,
+                  -0.7930193543434143,
+                  -0.7930193543434143,
+                  -1.001405954360962,
+                  -1.001405954360962,
+                  -1.001405954360962,
+                  3.8395066261291504,
+                  3.8395066261291504,
+                  3.8395066261291504,
+                  7.678316593170166,
+                  3.8580915927886963,
+                  3.8196229934692383,
+                  -2.6926815509796143,
+                  2.7579697850157348
+                ],
+                [
+                  -1.3487945795059204,
+                  -1.3487945795059204,
+                  -0.6852723956108093,
+                  -0.6852723956108093,
+                  -0.6852723956108093,
+                  -0.6852723956108093,
+                  -0.9094642996788025,
+                  -0.9094642996788025,
+                  -0.9094642996788025,
+                  -0.9087420701980591,
+                  -0.9087420701980591,
+                  -0.9087420701980591,
+                  -1.81294846534729,
+                  -0.9156818389892578,
+                  -0.8931480050086975,
+                  11.176619529724121,
+                  2.7642604747111617
+                ]
+              ]
+            }
+          }
+        }
+      }
+    },
+    "intentDomains": {},
+    "extraSentences": [
+      [
+        "fr",
+        "sale con"
+      ],
+      [
+        "fr",
+        "va te faire foutre"
+      ],
+      [
+        "fr",
+        "tu es idiot"
+      ],
+      [
+        "fr",
+        "je suis content"
+      ],
+      [
+        "fr",
+        "merci beaucoup"
+      ],
+      [
+        "fr",
+        "super merci"
+      ],
+      [
+        "fr",
+        "ok"
+      ]
+    ]
+  },
+  "ner": {
+    "settings": {
+      "tag": "ner",
+      "entityPreffix": "%",
+      "entitySuffix": "%"
+    },
+    "rules": {}
+  },
+  "nlgManager": {
+    "settings": {
+      "tag": "nlg-manager"
+    },
+    "responses": {}
+  },
+  "actionManager": {
+    "settings": {
+      "tag": "action-manager"
+    },
+    "actions": {}
+  },
+  "slotManager": {}
+}

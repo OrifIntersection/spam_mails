@@ -1,0 +1,254 @@
+intent,utterance
+insulte,tu es con
+insulte,espèce de con
+insulte,t'es vraiment con
+insulte,espèce d'idiot
+insulte,t'es idiot
+insulte,espèce d'imbécile
+insulte,t'es débile
+insulte,pauvre type
+insulte,pauvre con
+insulte,sale con
+insulte,gros con
+insulte,petit con
+insulte,va te faire foutre
+insulte,va te faire enculer
+insulte,va te faire voir
+insulte,fils de pute
+insulte,enfoiré
+insulte,bâtard
+insulte,salaud
+insulte,salopard
+insulte,ordure
+insulte,charogne
+insulte,raclure
+insulte,fumier
+insulte,putain
+insulte,merde
+insulte,bordel
+insulte,putain de merde
+insulte,bordel de merde
+insulte,ta gueule
+insulte,ferme ta gueule
+insulte,ferme-la
+insulte,la ferme
+insulte,casse-toi
+insulte,dégage
+insulte,barre-toi
+insulte,fous le camp
+insulte,dégage de là
+insulte,casse-toi de là
+insulte,tu me fais chier
+insulte,tu me saoules
+insulte,tu me gaves
+insulte,tu me cours
+insulte,tu m'énerves
+insulte,tu me rends fou
+insulte,tu me rends dingue
+insulte,tu es nul
+insulte,t'es nul
+insulte,c'est nul
+insulte,c'est de la merde
+insulte,c'est de la daube
+insulte,c'est pourri
+insulte,c'est nul à chier
+insulte,c'est vraiment nul
+menace,je vais te tuer
+menace,je vais te buter
+menace,je vais te défoncer
+menace,je vais te casser la gueule
+menace,je vais te faire la peau
+menace,je vais te régler ton compte
+menace,tu vas le regretter
+menace,tu vas payer
+menace,tu vas voir ce qui t'attend
+menace,je t'aurai
+menace,je te jure que tu vas le regretter
+menace,ta tête va me servir de ballon
+menace,je vais te découper
+menace,je vais te massacrer
+menace,je vais t'éclater
+menace,je vais te réduire en charpie
+menace,je vais te mettre en pièces
+menace,je vais te faire la peau
+menace,je vais t'arracher les yeux
+menace,je vais te crever
+arnaque,gagnez des millions
+arnaque,gagnez de l'argent facile
+arnaque,devenez riche sans effort
+arnaque,travaillez de chez vous et gagnez 5000€ par mois
+arnaque,argent facile
+arnaque,gagner de l'argent sans rien faire
+arnaque,investissement miracle
+arnaque,rendement garanti
+arnaque,profits garantis
+arnaque,doublez votre argent en 24h
+arnaque,héritage de 10 millions
+arnaque,lotie gagnante
+arnaque,vous avez gagné au loto
+arnaque,vous êtes notre gagnant
+arnaque,félicitations vous avez gagné
+arnaque,cliquez pour réclamer votre prix
+arnaque,dernier avertissement
+arnaque,compte bloqué
+arnaque,votre compte sera supprimé
+arnaque,action urgente requise
+arnaque,vérifiez vos informations immédiatement
+arnaque,mettez à jour vos données bancaires
+arnaque,confirmez vos coordonnées
+arnaque,problème de sécurité
+arnaque,tentative de connexion suspecte
+arnaque,votre mot de passe a expiré
+arnaque,veuillez réinitialiser votre mot de passe
+arnaque,payez vos impôts immédiatement
+arnaque,amende impayée
+arnaque,dernier rappel avant poursuite
+arnaque,huissier de justice
+arnaque,avis de saisie
+arnaque,prêt immédiat sans justificatif
+arnaque,crédit express
+arnaque,argent rapide
+arnaque,viagra pas cher
+arnaque,médicaments sans ordonnance
+arnaque,pharmacie en ligne discount
+arnaque,rencontres coquines
+arnaque,femmes célibataires près de chez vous
+arnaque,site de rencontre gratuit
+arnaque,offre spéciale 50% de réduction
+arnaque,promotion exceptionnelle
+arnaque,derniers jours pour profiter de l'offre
+arnaque,solde jusqu'à 70%
+arnaque,cadeau exclusif
+arnaque,offre limitée
+arnaque,plus que 3 exemplaires
+arnaque,stock épuisé
+arnaque,dépêchez-vous
+arnaque,ne ratez pas cette occasion unique
+réclamation,je suis très mécontent
+réclamation,je suis déçu
+réclamation,c'est inadmissible
+réclamation,je n'en peux plus
+réclamation,j'en ai marre
+réclamation,j'en ai ras-le-bol
+réclamation,c'est n'importe quoi
+réclamation,c'est du grand n'importe quoi
+réclamation,c'est une honte
+réclamation,c'est scandaleux
+réclamation,c'est inacceptable
+réclamation,je ne suis pas satisfait
+réclamation,je ne recommanderai pas
+réclamation,service déplorable
+réclamation,service client inexistant
+réclamation,aucun service après-vente
+réclamation,personne ne répond
+réclamation,impossible de vous joindre
+réclamation,ça fait 3 semaines que j'attends
+réclamation,toujours pas reçu
+réclamation,colis perdu
+réclamation,produit défectueux
+réclamation,article cassé
+réclamation,ne fonctionne pas
+réclamation,en panne dès la première utilisation
+réclamation,qualité médiocre
+réclamation,très mauvaise qualité
+réclamation,ridicule
+réclamation,ça ne vaut rien
+réclamation,perte de temps
+réclamation,argent gaspillé
+réclamation,je veux être remboursé
+réclamation,remboursez-moi
+réclamation,je demande un remboursement
+réclamation,je veux parler à un responsable
+réclamation,je porte plainte
+réclamation,je vais contacter le médiateur
+réclamation,mise en demeure
+réclamation,droit de rétractation
+positif,merci
+positif,merci beaucoup
+positif,merci infiniment
+positif,mille mercis
+positif,un grand merci
+positif,merci du fond du cœur
+positif,je vous remercie
+positif,je te remercie
+positif,remettre
+positif,remerciements
+positif,avec mes remerciements
+positif,bravo
+positif,félicitations
+positif,toutes mes félicitations
+positif,excellent travail
+positif,super travail
+positif,beau travail
+positif,bien joué
+positif,chapeau
+positif,respect
+positif,c'est génial
+positif,c'est super
+positif,c'est formidable
+positif,c'est fantastique
+positif,c'est magnifique
+positif,c'est parfait
+positif,c'est impeccable
+positif,c'est excellent
+positif,c'est top
+positif,c'est cool
+positif,c'est sympa
+positif,c'est chouette
+positif,c'est bien
+positif,très bien
+positif,parfaitement bien
+positif,je suis content
+positif,je suis ravi
+positif,je suis enchanté
+positif,je suis heureux
+positif,je suis satisfait
+positif,ça me fait plaisir
+positif,cela me réjouit
+positif,quelle bonne nouvelle
+positif,excellente nouvelle
+positif,ça marche
+positif,ça fonctionne
+positif,tout est parfait
+positif,impeccable
+neutre,ok
+neutre,OK
+neutre,d'accord
+neutre,pas de problème
+neutre,ça marche
+neutre,entendu
+neutre,compris
+neutre,reçu
+neutre,noté
+neutre,je vois
+neutre,je comprends
+neutre,c'est noté
+neutre,j'ai compris
+neutre,très bien
+neutre,d'accord merci
+neutre,ok merci
+neutre,merci de l'info
+neutre,merci pour l'information
+neutre,je vous remercie pour votre retour
+neutre,je prends note
+neutre,je vais regarder ça
+neutre,je vais vérifier
+neutre,je vais m'en occuper
+neutre,je fais le nécessaire
+neutre,je transmets
+neutre,je vais voir
+neutre,on verra
+neutre,peut-être
+neutre,éventuellement
+neutre,si nécessaire
+neutre,le cas échéant
+neutre,au besoin
+neutre,à voir
+neutre,à suivre
+neutre,bonne journée
+neutre,bonne soirée
+neutre,cordialement
+neutre,bien cordialement
+neutre,sincèrement
+neutre,bien sincèrement
+neutre,salutations distinguées
