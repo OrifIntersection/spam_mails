@@ -9,9 +9,7 @@ Nous pouvons récolter toute les métadonnées se trouvant dans le mail. Grâce 
 Voici les données que nous traitons actuellement dans les mails reçus :
 
 
-Émotions ressenties à la lecture du spam, la longueur du message, la date de réception
-
-**A MODIFIER**
+Liens contenus dans le mail, pièces jointes & script cachés...
 <br>
 {
   "id": "1772790547513-vc3u4e",
@@ -101,4 +99,3 @@ Après avoir comparé plusieurs NLP, l'outil utilisé sera [node-nlp](https://ww
 📁 analysis/analysis-123456.json         ← Résultat FINAL (avec mode: "fallback")  <br>
     ↓<br>
 ( PAS de fichier dans npm-nlp_analysis/ )
-
