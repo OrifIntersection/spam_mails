@@ -1,10 +1,25 @@
-import React,{ StrictMode } from 'react';
+// •  React
+import React, { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
-import App from './App.jsx';
-import "./tailwind-setup.css";
+import { BrowserRouter, Routes, Route } from 'react-router';
+import App from './App';
+
+// •  Modules
+import FrontPage from './modules/frontpage';
+import LoadingPage from './modules/loadingpage';
+
+// •  Feuille de styles
+import './tailwind-setup.css';
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <App />
+    {/*<App />*/}
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<App />} />
+        <Route path="/frontpage" element={<FrontPage />} />
+        <Route path="/loading" element={<LoadingPage />}/>
+      </Routes>
+    </BrowserRouter>
   </StrictMode>,
 )

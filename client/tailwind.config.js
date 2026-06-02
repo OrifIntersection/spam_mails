@@ -1,7 +1,12 @@
 module.exports = {
   theme: {
-    fontFamily: {
-      sans: ['Helvetica', 'Arial', 'sans-serif'],
+    extend: {
+      fontFamily: {
+        sans: ['Helvetica', 'Arial', 'sans-serif'],
+      },
+      colors: {
+        background: '#1f2751',
+      },
     },
   },
 }
