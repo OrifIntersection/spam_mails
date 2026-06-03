@@ -1,6 +1,9 @@
+// • React
 import { useState, useEffect, useNavigate } from 'react';
 import LoadingPage from './modules/loadingpage.jsx';
-import FrontPage from './modules/frontpage.jsx';
+import IntroPage from './modules/intro.jsx';
+
+// • TailwindCSS
 import './tailwind-setup.css';
 
 function App() {
@@ -19,8 +22,8 @@ function App() {
       setPage(2);
       console.log("RAPIDE")
     },
-      // 200
-      getRandomInt(5870, 9500)
+      200
+      //getRandomInt(5870, 9500)
     );
 
   }, []);
@@ -33,7 +36,7 @@ function App() {
       </>)
     case 2:
       return (<>
-        <FrontPage />
+        <IntroPage />
       </>)
 
     case 3:

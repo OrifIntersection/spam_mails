@@ -1,4 +1,7 @@
+// • React
 import { useEffect, useState, useRef } from "react";
+
+// • Assets
 import background from '../assets/loadingpage/spaceshipbackground.mp4'
 
 const layers = [
@@ -24,7 +27,7 @@ const layers = [
     },
 ];
 
-export default function LoadingPage() {
+export default function LoadingPage({content, bg}) {
     const [step, setStep] = useState(0);
     const videoRef = useRef(null);
 
@@ -47,7 +50,7 @@ export default function LoadingPage() {
         </video>
 
         <div className="flex flex-col items-center justify-center h-screen bg-none overflow-hidden ">
-            <h1 className="pb-[100px] text-cyan-300 text-2xl">Embarquement dans le [à définir]. </h1>
+            <h1 className="pb-[100px] text-cyan-300 text-2xl">{content}</h1>
 
             <div className="relative w-[110px] h-[160px]">
                 {layers.map((layer, i) => {
