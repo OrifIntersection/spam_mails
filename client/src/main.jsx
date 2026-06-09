@@ -1,7 +1,7 @@
 // •  React
-import React, { Component, StrictMode, Suspense, useEffect, useState } from 'react';
+import React, { Component, StrictMode, Suspense, useEffect, useState, createContext, useRef } from 'react';
 import { createRoot } from 'react-dom/client';
-import { createBrowserRouter, RouterProvider, useRouteError, NavLink, Outlet, useLoaderData, useNavigation } from 'react-router-dom';
+import { createBrowserRouter, RouterProvider, useRouteError, NavLink, Outlet, useLoaderData, useNavigation, useLocation } from 'react-router-dom';
 
 // • TailwindCSS
 import './tailwind-setup.css';
@@ -120,7 +120,56 @@ function DefaultLayout({ timer }) {
   );
 }
 */
+
+let x = 50;
+let y = 50;
+let speed = 1;
+
+//  Layout principal
 function RootLayout() {
+  const ref = useRef(null);
+  const direction = useRef("left");
+
+  const location = useLocation();
+
+  useEffect(() => {
+    console.log("L'utilisateur est sur la page :", location.pathname);
+    console.log("Paramètres de recherche (URL) :", location.search); 
+  }, [location])
+
+
+  // Dessin
+  function draw() {
+    let canvas = ref.current;
+    const ctx = canvas.getContext("2d");
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    
+
+    ctx.beginPath();
+    ctx.arc(x, y, 40, 0, 2 * Math.PI);
+    ctx.strokeStyle = '#3498db';
+    ctx.stroke();
+
+    if (direction.current === "left") {
+      x += speed;
+      if (x >= 100) {
+        direction.current = "right";
+      }
+    } else {
+      x -= speed;
+      if (x <= 50) {
+        direction.current = "left";
+      }
+    }
+
+    setTimeout(() => {
+    }, 100)
+  }
+
+  useEffect(() => {
+    draw();
+  }, []);
+
   return <div>
     <header>
       <div>LOGO</div>
@@ -136,7 +185,9 @@ function RootLayout() {
     </header>
     <hr />
     <Outlet />
-
+    <canvas id="tutoriel" width="450" height="450" ref={ref} className=''>
+      <h1>Le canvas n'est pas supporté...</h1>
+    </canvas>
   </div>;
 }
 
@@ -222,10 +273,10 @@ function ExploreGalaxy() {
   const [loading, setLoading] = useState(true);
 
   let isLoading = navigation.state === "loading";
-  
+
   loading ? console.log("Yes") : console.log("NO");
 
-  useEffect(() => { 
+  useEffect(() => {
     if (isLoading != "loading") {
       setLoading(false);
       console.log("OK")
@@ -233,8 +284,8 @@ function ExploreGalaxy() {
   }, [navigation.state])
 
   return <>
-  {isLoading && <LoadingPage/>}
-  <h1>Explore galaxy</h1>
+    {isLoading && <LoadingPage />}
+    <h1>Explore galaxy</h1>
     <NavLink to="/explore/systems/random-user" className={({ isActive, isPending, isTransitioning }) =>
       [isActive ? "text-pink-500" : "text-blue-500"].join(" ")
     }>Find a user system</NavLink>
@@ -292,12 +343,12 @@ const router = createBrowserRouter([
       },
       {
         path: "explore",
-        element: ExploreLayout,
+        Component: ExploreLayout,
         children: [
           {
             index: true,
             loader: async () => {
-              await new Promise(resolve => setTimeout(resolve,2000))
+              await new Promise(resolve => setTimeout(resolve, 2000)); // ⏱️ Attend 2 secondes             
               return { galaxy: [] };
             },
             Component: ExploreGalaxy
