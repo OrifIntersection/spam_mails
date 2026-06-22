@@ -1,174 +1,246 @@
 // •  React
-import React, { Component, StrictMode, Suspense, useEffect, useState, createContext, useRef } from 'react';
+import React, { Component, StrictMode, Suspense, useEffect, useState, createContext, useRef, useContext } from 'react';
 import { createRoot } from 'react-dom/client';
 import { createBrowserRouter, RouterProvider, useRouteError, NavLink, Outlet, useLoaderData, useNavigation, useLocation } from 'react-router-dom';
+import chalk from 'chalk';
 
 // • TailwindCSS
 import './tailwind-setup.css';
-
-/*
-// •  Layouts
-import UserLayout from './layouts/userlayout';
-import DashboardLayout from './layouts/dashboardLayout';
-
-// •  Modules
-import App from './App';
-import Intro from './modules/intro';
-*/
 import LoadingPage from './modules/loadingpage';
-/*
-import OnBoarding from './modules/onboarding';
 
-import Spamalaxy from './modules/spamalaxy/spamalaxy';
-import UsersSystem from './modules/spamalaxy/usersystem';
-import UserCellInfos from './modules/spamalaxy/cells';
-
-// • Loaders
-import Loader from './loaders/loader';
-import Loader2 from './loaders/loader2';
-
-// • Errors
-import ErrorPage from './error'
+// • Path
+const explore = "explore";
+const search = "search";
+const home = "/";
+const auth = "auth";
+const systemsUserId = "systems/:userId";
+const blobsBlobId = "blobs/:blobId";
 
 
+//  Setup RequestAnimationFrame()
+let output = document.getElementById("output");
+let totalFrames = 0;
+let current, consumedTime;
+
+// Set fps to 30
+let fps = 30;
+let intervalOffps = 1000 / fps;
+let lastFrameTime = Date.now();
+let startTime = lastFrameTime;
+
+let animationId;
+
+//// ─────────────────────────
+//      OTHER
+const canvasWidth = 450;
+const canvasHeight = 450;
 
 
-// • Routing
+//  To catch the current location
+let currentLocation = null;
 
-const router = createBrowserRouter([
-  {
-    path: "/",
-    Component: App,
-    errorElement: <ErrorPage />
-  },
-  {
-    path: "/intro",
-    loader: () => Loader(4000),
-   // HydrateFallback: () => LoadingPage("Embarquement dans le [à définir]", "bg1"),
-    lazy: () => import('./modules/intro').then(module => ({
-      Component: module.default
-    })),
-    errorElement: <ErrorPage />
-  },
-  {
-    path: "/onboarding",
-    loader: () => {
-      // On renvoie un objet classique avec la promesse à l'intérieur
-      return {
-        donneesLentes: Loader2(10000)
-      };
-    },
-    Component: OnBoarding,
-    /
-    // HydrateFallback: () => LoadingPage("Chargement du didactitiel","bg2"),
-    // lazy: () => import('./modules/onboarding').then(module => ({
-    //   Component: module.default
-    //  })),
-     
-    errorElement: <ErrorPage />
-  },
-  {
-    path: "/dashboard",
-    loader: () => Loader(4000),
-   // HydrateFallback: () => LoadingPage("Bienvenue dans la spamalaxie", "bg3"),
-    lazy: () => import('./layouts/dashboardLayout').then(module => ({
-      Component: module.default,
-    })),
-    errorElement: <ErrorPage />,
-    children: [
-      { index: true, Component: Spamalaxy },
-      {
-        path: "users/:userId", Component: UserLayout, children: [
-          { index: true, Component: UsersSystem },
-          { path: "cells/:cellId", Component: UserCellInfos }
-        ]
-      },
-    ]
-  },
-]);*/
+//  Arc && arc animation
+let x = 40;
+let y = 40;
 
-// Une petite fonction utilitaire pour simuler un délai dans les loaders
-const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
-/*
-function DefaultLayout({ timer }) {
-  const navigation = useNavigation();
-  const [loading, setLoading] = useState(true);
+let rayon = 40;
+let speed = 5;
 
-  // Vérifie si une navigation est en cours (un loader est en train de tourner)
-  let isLoading = navigation.state === "loading";
+// •   ExploreUserSystem default positions
 
-  useEffect(() => {
-    if (isLoading != "loading") {
-      setLoading(false)
-      console.log("OK")
-    }
-  }, [navigation.state])
+// •   ExploreBlobSystem default positions
 
 
-  loading ? console.log("Yes") : console.log("NO");
+// • UpLeft
+const defaultPositionxUpLeft = rayon;
+const defaultPositionyUpLeft = rayon;
 
-  return (
-    <div className="app-container">
-      {/* Si le routeur charge des données, on affiche le composant de chargement /}
-      {isLoading && <div className="global-spinner"><LoadingPage /></div>}
+// • UpRight
+const defaultPositionxUpRight = canvasWidth - rayon;
+const defaultPositionyUpRight = rayon;
 
-      <main className={isLoading ? "hidden" : ""}>
-        {/* L'Outlet affiche la route active }
-        <Outlet />
-      </main>
-    </div>
-  );
-}
-*/
+// • DownLeft
+const defaultPositionxDownLeft = rayon;
+const defaultPositionyDownLeft = canvasHeight - rayon;
 
-let x = 50;
-let y = 50;
-let speed = 1;
+// • DownRight
+const defaultPositionxDownRight = canvasWidth - rayon;
+const defaultPositionyDownRight = canvasHeight - rayon;
+
+//  Une petite fonction utilitaire pour simuler un délai dans les loaders
+//const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
 
 //  Layout principal
 function RootLayout() {
-  const ref = useRef(null);
+  const [animation, setAnimation] = useState("exploreusersystem");
+  const [position, setPosition] = useState(null)
+  const [good, setGood] = useState(false);
+  const canvasRef = useRef(null);
   const direction = useRef("left");
-
+  const direction2 = useRef("down");
   const location = useLocation();
 
   useEffect(() => {
-    console.log("L'utilisateur est sur la page :", location.pathname);
-    console.log("Paramètres de recherche (URL) :", location.search); 
+    currentLocation = location;
+    console.log("%cL'utilisateur est sur la page :" + location.pathname, "color: #0070f3; font-weight: bold;");
+    console.log("%cParamètres de recherche (URL) :" + location.search, "color: #0070f3; font-weight: bold;");
   }, [location])
 
+  //  Regex
+  const regexUserSystem = `^\/?${explore}\/systems\/[^/]+$`;
+  const regexBlobId = `^\/${explore}\/systems.*\/blobs\/.*`;
+  const regexBlob = new RegExp(regexBlobId);
+  const regexUser = new RegExp(regexUserSystem);
 
-  // Dessin
-  function draw() {
-    let canvas = ref.current;
-    const ctx = canvas.getContext("2d");
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
+  console.log(position)
+  function draw(position) {
+    switch (position) {
+      case 'UpLeft':
+        console.log("upleft");
+        if (x > defaultPositionxUpLeft) {
+          x -= speed;
+        } else if (x < defaultPositionxUpLeft) {
+          x += speed;
+        } else if (y < defaultPositionyUpLeft) {
+          y += speed;
+        } else if (y > defaultPositionyUpLeft) {
+          y -= speed;
+        } else {
+          console.log("DOWN");
+          setPosition(null);
+        }
+        break;
+      case 'UpRight':
+        console.log("UpRight");
+        if (x > defaultPositionxUpRight) {
+          x -= speed;
+        } else if (x < defaultPositionxUpRight) {
+          x += speed;
+        } else if (y < defaultPositionyUpRight) {
+          y += speed;
+        } else if (y > defaultPositionyUpRight) {
+          y -= speed;
+        } else {
+          console.log("DOWN");
+          setPosition(null);
+        };
+        break;
+      case 'DownLeft':
+        console.log("DownLeft");
+        if (x > defaultPositionxDownLeft) {
+          x -= speed;
+        } else if (x < defaultPositionxDownLeft) {
+          x += speed;
+        } else if (y < defaultPositionyDownLeft) {
+          y += speed;
+        } else if (y > defaultPositionyDownLeft) {
+          y -= speed;
+        } else {
+          console.log("DOWN");
+          setPosition(null);
+        };
+        break;
+      case 'DownRight':
+        console.log("DownRight");
+        if (x > defaultPositionxDownRight) {
+          x -= speed;
+        } else if (x < defaultPositionxDownRight) {
+          x += speed;
+        } else if (y < defaultPositionyDownRight) {
+          y += speed;
+        } else if (y > defaultPositionyDownRight) {
+          y -= speed;
+        } else {
+          console.log("DOWN");
+          setPosition(null);
+        };
+        break;
+      case null:
+        console.log("NULL");
+        break;
+    };
     
+    cancelAnimationFrame(animationId);
+    animationId = requestAnimationFrame(draw);
 
-    ctx.beginPath();
-    ctx.arc(x, y, 40, 0, 2 * Math.PI);
-    ctx.strokeStyle = '#3498db';
-    ctx.stroke();
+    // Manage FPS
+    current = Date.now();
+    consumedTime = current - lastFrameTime;
 
-    if (direction.current === "left") {
-      x += speed;
-      if (x >= 100) {
-        direction.current = "right";
+    // canvas content
+    if (consumedTime > intervalOffps) {
+      let canvas = canvasRef.current;
+      const ctx = canvas.getContext("2d");
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.beginPath();
+      ctx.arc(x, y, rayon, 0, 2 * Math.PI);
+      ctx.stroke();
+
+
+      /*
+      //  ExploreUserSystem
+      if (regexUser.test(location.pathname)) {
+
+        // Animation
+        if (animation === "exploreusersystem") {
+          ctx.fillStyle = '#386c38';
+          ctx.fill();
+          if (direction.current === "left") {
+            x += speed;
+            if (x >= canvasWidth - rayon) {
+              direction.current = "right";
+            }
+          } else {
+            x -= speed;
+            if (x <= rayon) {
+              direction.current = "left";
+            }
+          }
+        }
       }
-    } else {
-      x -= speed;
-      if (x <= 50) {
-        direction.current = "left";
-      }
-    }
 
-    setTimeout(() => {
-    }, 100)
-  }
+      //  ExploreBlobSystem
+      else if (regexBlob.test(location.pathname)) {
+        ctx.fillStyle = '#191d73';
+        ctx.fill();
+        if (direction2.current === "up") {
+          y += speed;
+          if (y >= (canvasHeight - rayon)) {
+            direction2.current = "down";
+          }
+        } else {
+          y -= speed;
+          if (y <= rayon) {
+            direction2.current = "up";
+          }
+        }
+      } else {
+        console.log("%cDoesn't work", "color: #830c0c; font-weight: bold;");
+      };
+      */
+    };
+  };
 
   useEffect(() => {
     draw();
-  }, []);
+  }, [canvasRef, location.pathname]);
+
+  function handleClickUpLeft() {
+    setPosition("UpLeft");
+  };
+
+  function handleClickUpRight() {
+    setPosition("UpRight");
+  };
+
+  function handleClickDownLeft() {
+    setPosition("DownLeft");
+  };
+
+  function handleClickDownRight() {
+    setPosition("DownRight");
+  };
 
   return <div>
     <header>
@@ -183,9 +255,14 @@ function RootLayout() {
         }>Login</NavLink></li>
       </ul>
     </header>
+    <button onClick={handleClickUpLeft} className='hover:opacity-[50%]'>upleft</button>
+    <button onClick={handleClickUpRight} className='hover:opacity-[50%]'>upright</button><br />
+
+    <button onClick={handleClickDownLeft} className='hover:opacity-[50%]'>downleft</button>
+    <button onClick={handleClickDownRight} className='hover:opacity-[50%]'>downright</button>
     <hr />
     <Outlet />
-    <canvas id="tutoriel" width="450" height="450" ref={ref} className=''>
+    <canvas className="border-2 border-black-500" id="tutoriel" width={canvasWidth} height={canvasHeight} ref={canvasRef}>
       <h1>Le canvas n'est pas supporté...</h1>
     </canvas>
   </div>;
@@ -267,19 +344,14 @@ function ExploreLayout() {
 
 function ExploreGalaxy() {
   const { galaxy } = useLoaderData();
-  console.log(galaxy)
   //----------------------------------------------------
   const navigation = useNavigation();
   const [loading, setLoading] = useState(true);
 
   let isLoading = navigation.state === "loading";
-
-  loading ? console.log("Yes") : console.log("NO");
-
   useEffect(() => {
     if (isLoading != "loading") {
       setLoading(false);
-      console.log("OK")
     }
   }, [navigation.state])
 
@@ -328,7 +400,7 @@ function ExploreSearch() {
 
 const router = createBrowserRouter([
   {
-    path: "/",
+    path: home,
     Component: RootLayout,
     children: [
       { index: true, Component: Home },
@@ -342,7 +414,7 @@ const router = createBrowserRouter([
         ],
       },
       {
-        path: "explore",
+        path: explore,
         Component: ExploreLayout,
         children: [
           {
@@ -354,14 +426,14 @@ const router = createBrowserRouter([
             Component: ExploreGalaxy
           },
           {
-            path: "search",
+            path: search,
             loader: async () => {
               return { users: [] };
             },
             Component: ExploreSearch
           },
           {
-            path: "systems/:userId",
+            path: systemsUserId,
             children: [
               {
                 index: true,
@@ -371,7 +443,7 @@ const router = createBrowserRouter([
                 Component: ExploreUserSystem
               },
               {
-                path: "blobs/:blobId",
+                path: blobsBlobId,
                 loader: async () => {
                   return { blob: { id: "blod-id" } };
                 },
@@ -386,7 +458,7 @@ const router = createBrowserRouter([
 ]);
 
 createRoot(document.getElementById('root')).render(
-  <StrictMode>
-    <RouterProvider router={router} />
-  </StrictMode>,
+  // <StrictMode>
+  <RouterProvider router={router} />
+  // </StrictMode>,
 );
