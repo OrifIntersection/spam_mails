@@ -1,179 +1,209 @@
 // •  React
-import React, { Component, StrictMode, Suspense, useEffect, useState, createContext, useRef } from 'react';
+import React, { Component, StrictMode, Suspense, useEffect, useState, createContext, useRef, useContext } from 'react';
 import { createRoot } from 'react-dom/client';
 import { createBrowserRouter, RouterProvider, useRouteError, NavLink, Outlet, useLoaderData, useNavigation, useLocation } from 'react-router-dom';
+import chalk from 'chalk';
 
 // • TailwindCSS
 import './tailwind-setup.css';
-
-/*
-// •  Layouts
-import UserLayout from './layouts/userlayout';
-import DashboardLayout from './layouts/dashboardLayout';
-
-// •  Modules
-import App from './App';
-import Intro from './modules/intro';
-*/
 import LoadingPage from './modules/loadingpage';
-/*
-import OnBoarding from './modules/onboarding';
 
-import Spamalaxy from './modules/spamalaxy/spamalaxy';
-import UsersSystem from './modules/spamalaxy/usersystem';
-import UserCellInfos from './modules/spamalaxy/cells';
-
-// • Loaders
-import Loader from './loaders/loader';
-import Loader2 from './loaders/loader2';
-
-// • Errors
-import ErrorPage from './error'
+// • Assets
+import Chips from './assets/UI/chips';
+import Button from './assets/UI/button';
+// • Path
+const explore = "explore";
+const search = "search";
+const home = "/";
+const auth = "auth";
+const systemsUserId = "systems/:userId";
+const blobsBlobId = "blobs/:blobId";
 
 
+//  Setup RequestAnimationFrame()
+let output = document.getElementById("output");
+let totalFrames = 0;
+let current, consumedTime;
 
+// Set fps to 30
+let fps = 30;
+let intervalOffps = 1000 / fps;
+let lastFrameTime = Date.now();
+let startTime = lastFrameTime;
 
-// • Routing
+//// ─────────────────────────
+//      OTHER
+const canvasWidth = 2000;
+const canvasHeight = 100;
 
-const router = createBrowserRouter([
-  {
-    path: "/",
-    Component: App,
-    errorElement: <ErrorPage />
-  },
-  {
-    path: "/intro",
-    loader: () => Loader(4000),
-   // HydrateFallback: () => LoadingPage("Embarquement dans le [à définir]", "bg1"),
-    lazy: () => import('./modules/intro').then(module => ({
-      Component: module.default
-    })),
-    errorElement: <ErrorPage />
-  },
-  {
-    path: "/onboarding",
-    loader: () => {
-      // On renvoie un objet classique avec la promesse à l'intérieur
-      return {
-        donneesLentes: Loader2(10000)
-      };
-    },
-    Component: OnBoarding,
-    /
-    // HydrateFallback: () => LoadingPage("Chargement du didactitiel","bg2"),
-    // lazy: () => import('./modules/onboarding').then(module => ({
-    //   Component: module.default
-    //  })),
-     
-    errorElement: <ErrorPage />
-  },
-  {
-    path: "/dashboard",
-    loader: () => Loader(4000),
-   // HydrateFallback: () => LoadingPage("Bienvenue dans la spamalaxie", "bg3"),
-    lazy: () => import('./layouts/dashboardLayout').then(module => ({
-      Component: module.default,
-    })),
-    errorElement: <ErrorPage />,
-    children: [
-      { index: true, Component: Spamalaxy },
-      {
-        path: "users/:userId", Component: UserLayout, children: [
-          { index: true, Component: UsersSystem },
-          { path: "cells/:cellId", Component: UserCellInfos }
-        ]
-      },
-    ]
-  },
-]);*/
+//  To catch the current location
+let currentLocation = null;
 
-// Une petite fonction utilitaire pour simuler un délai dans les loaders
-const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
-/*
-function DefaultLayout({ timer }) {
-  const navigation = useNavigation();
-  const [loading, setLoading] = useState(true);
+//  Arc && arc animation
+let rayon = 40;
+let speed = 5;
 
-  // Vérifie si une navigation est en cours (un loader est en train de tourner)
-  let isLoading = navigation.state === "loading";
+// • UpLeft
+const defaultPositionxUpLeft = rayon;
+const defaultPositionyUpLeft = rayon;
 
-  useEffect(() => {
-    if (isLoading != "loading") {
-      setLoading(false)
-      console.log("OK")
-    }
-  }, [navigation.state])
+// • UpRight
+const defaultPositionxUpRight = canvasWidth - rayon;
+const defaultPositionyUpRight = rayon;
 
+// • DownLeft
+const defaultPositionxDownLeft = rayon;
+const defaultPositionyDownLeft = canvasHeight - rayon;
 
-  loading ? console.log("Yes") : console.log("NO");
+// • DownRight
+const defaultPositionxDownRight = canvasWidth - rayon;
+const defaultPositionyDownRight = canvasHeight - rayon;
 
-  return (
-    <div className="app-container">
-      {/* Si le routeur charge des données, on affiche le composant de chargement /}
-      {isLoading && <div className="global-spinner"><LoadingPage /></div>}
+//  Une petite fonction utilitaire pour simuler un délai dans les loaders
+//const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
-      <main className={isLoading ? "hidden" : ""}>
-        {/* L'Outlet affiche la route active }
-        <Outlet />
-      </main>
-    </div>
-  );
-}
-*/
-
-let x = 50;
-let y = 50;
-let speed = 1;
 
 //  Layout principal
 function RootLayout() {
-  const ref = useRef(null);
+  const [animation, setAnimation] = useState("exploreusersystem");
+  const [position, setPosition] = useState(null)
+  const [good, setGood] = useState(false);
+  const x = useRef(40);
+  const y = useRef(40);
+  const canvasRef = useRef(null);
   const direction = useRef("left");
-
+  const direction2 = useRef("down");
   const location = useLocation();
 
   useEffect(() => {
-    console.log("L'utilisateur est sur la page :", location.pathname);
-    console.log("Paramètres de recherche (URL) :", location.search); 
+    currentLocation = location;
+    console.log("%cL'utilisateur est sur la page :" + location.pathname, "color: #0070f3; font-weight: bold;");
+    console.log("%cParamètres de recherche (URL) :" + location.search, "color: #0070f3; font-weight: bold;");
   }, [location])
 
+  //  Regex
+  const regexUserSystem = `^\/?${explore}\/systems\/[^/]+$`
+  const regexBlobId = `^\/${explore}\/systems.*\/blobs\/.*`;
+  const regexBlob = new RegExp(regexBlobId);
+  const regexUser = new RegExp(regexUserSystem);
 
-  // Dessin
-  function draw() {
-    let canvas = ref.current;
+  useEffect(() => {
+    let animationId;
+    let current = 0;
+    let consumedTime = 0;
+    let lastFrameTime = 0;
+    const intervalOffps = 16;
+
+    const canvas = canvasRef.current;
     const ctx = canvas.getContext("2d");
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    
-
-    ctx.beginPath();
-    ctx.arc(x, y, 40, 0, 2 * Math.PI);
-    ctx.strokeStyle = '#3498db';
-    ctx.stroke();
-
-    if (direction.current === "left") {
-      x += speed;
-      if (x >= 100) {
-        direction.current = "right";
-      }
+    const parent = canvas.parentElement;
+    if (parent) {
+      ctx.canvas.width = parent.clientWidth - (parent.clientWidth / 100 * 30);
+      ctx.canvas.height = parent.clientHeight;
     } else {
-      x -= speed;
-      if (x <= 50) {
-        direction.current = "left";
+      console.log("Pas de parents")
+    }
+
+    window.addEventListener("resize", (event) => {
+
+
+    })
+
+    function switchFunction(selectedCase) {
+      console.log(selectedCase)
+      if (x.current > defaultPositionxUpLeft) {
+        x.current -= speed;
+      } if (x.current < defaultPositionxUpLeft) {
+        x.current += speed;
+      } if (y.current < defaultPositionyUpLeft) {
+        y.current += speed;
+      } if (y.current > defaultPositionyUpLeft) {
+        y.current -= speed;
       }
     }
 
-    setTimeout(() => {
-    }, 100)
-  }
+    function draw() {
+      if (!canvas) {
+        animationId = requestAnimationFrame(draw);
+        return;
+      }
 
-  useEffect(() => {
-    draw();
-  }, []);
+      switch (position) {
+        case 'UpLeft':
+          switchFunction(UpLeft);
+          break;
 
-  return <div>
-    <header>
+        case 'UpRight':
+          switchFunction(UpRight);
+          break;
+
+        case 'DownLeft':
+          switchFunction(DownLeft);
+          break;
+
+        case 'DownRight':
+          switchFunction(DownRight)
+          break;
+
+        case null:
+          console.log("NULL");
+          break;
+      }
+
+      current = Date.now();
+      consumedTime = current - lastFrameTime;
+
+      if (consumedTime > intervalOffps) {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.beginPath();
+        ctx.arc(x.current, y.current, rayon, 0, 2 * Math.PI);
+        ctx.stroke();
+
+        lastFrameTime = current - (consumedTime % intervalOffps);
+      }
+
+      animationId = requestAnimationFrame(draw);
+    }
+
+    animationId = requestAnimationFrame(draw);
+
+    return () => {
+      if (animationId) {
+        cancelAnimationFrame(animationId);
+      }
+    };
+  }, [position]);
+
+  function handleClickUpLeft() {
+    setPosition("UpLeft");
+  };
+
+  function handleClickUpRight() {
+    setPosition("UpRight");
+  };
+
+  function handleClickDownLeft() {
+    setPosition("DownLeft");
+  };
+
+  function handleClickDownRight() {
+    setPosition("DownRight");
+  };
+  {/*
+    <button onClick={handleClickUpLeft} className='hover:opacity-[50%]'>upleft</button>
+    <button onClick={handleClickUpRight} className='hover:opacity-[50%]'>upright</button><br />
+
+    <button onClick={handleClickDownLeft} className='hover:opacity-[50%]'>downleft</button>
+    <button onClick={handleClickDownRight} className='hover:opacity-[50%]'>downright</button>
+    
+    
+    <hr />
+    <Outlet />
+    */}
+  return <>
+    <header className='flex flex-row items-center justify-center w-[100%] h-[10%]'>
       <div>LOGO</div>
-      <ul>
+      <ul className='flex flex-row items-center justify-center'>
         <li><NavLink to="/" className={({ isActive, isPending, isTransitioning }) =>
           [isActive ? "text-pink-500" : "text-blue-500"].join(" ")
         }>Home</NavLink></li>
@@ -183,12 +213,18 @@ function RootLayout() {
         }>Login</NavLink></li>
       </ul>
     </header>
-    <hr />
-    <Outlet />
-    <canvas id="tutoriel" width="450" height="450" ref={ref} className=''>
-      <h1>Le canvas n'est pas supporté...</h1>
-    </canvas>
-  </div>;
+    <section className='flex flex-col flex-wrap justify-center align-center w-[100%] h-[90%]'>
+      <div className={`w-[100%] h-[100%] bg-green-100`}>
+        <canvas className="bg-red-100" id="tutoriel" ref={canvasRef}>
+          <h1>Le canvas n'est pas supporté...</h1>
+        </canvas>
+      </div>
+      {/*<div className='w-[30%] h-[100%]'>
+        </div>      
+        <Outlet/>
+      */}
+    </section>
+  </>;
 }
 
 function Home() {
@@ -243,8 +279,8 @@ function Register() {
 
 function ExploreLayout() {
 
-  return <>
-    <NavLink to="/explore" className={({ isActive, isPending, isTransitioning }) =>
+  return (<>
+    {/* <NavLink to="/explore" className={({ isActive, isPending, isTransitioning }) =>
       [isActive ? "text-pink-500" : "text-blue-500"].join(" ")
     }>Spamalaxie</NavLink>
 
@@ -260,26 +296,29 @@ function ExploreLayout() {
     <NavLink to="/" className={({ isActive, isPending, isTransitioning }) =>
       [isActive ? "text-pink-500" : "text-blue-500"].join(" ")
     }>Back to home</NavLink>
-    <div><Outlet /></div>
+*/}
+    <div className='flex flex-row items-center justify-center '>
 
-  </>;
+    </div>
+    <section>
+      <Outlet />
+      <div className='w-[25%] h-[100%]'></div>
+    </section>
+    <div>
+    </div >
+  </>);
 }
 
 function ExploreGalaxy() {
   const { galaxy } = useLoaderData();
-  console.log(galaxy)
   //----------------------------------------------------
   const navigation = useNavigation();
   const [loading, setLoading] = useState(true);
 
   let isLoading = navigation.state === "loading";
-
-  loading ? console.log("Yes") : console.log("NO");
-
   useEffect(() => {
     if (isLoading != "loading") {
       setLoading(false);
-      console.log("OK")
     }
   }, [navigation.state])
 
@@ -326,9 +365,39 @@ function ExploreSearch() {
     }>Find a user system</NavLink></>;
 }
 
+function AdvancedSearch() {
+  return (<div className='flex items-center justify-center flex-col flex-nowrap h-[100%]'>
+    <div className='flex items-center justify-center w-[100%] h-[25%]'>
+      <Button color={"#34e5eb"} textcolor={"#FFFFFF"} label={"Voir mon système utilisateur"} width={"300px"} height={"150px"} />
+    </div>
+    <div className='flex items-center justify-center w-[100%] h-[50%]'>
+      <div className='flex items-stretch justify-center flex-col flex-nowrap w-[600px] h-[50%] gap-[20px]'>
+        <div className='flex items-center justify-around flex-row w-[100%]'>
+          <Chips color={"#ff4757"} label={"Peur"} />
+          <Chips color={"#1d9f33"} label={"Culpabilité"} />
+          <Chips color={"#e9dd3e"} label={"Humiliation"} />
+        </div>
+        <div className='flex items-center justify-around flex-row w-[100%]'>
+          <Chips color={"#35c2d7"} label={"Déception"} />
+          <Chips color={"#3c2d9f"} label={"Agacement"} />
+          <Chips color={"#7f2129"} label={"Indignation"} />
+        </div>
+      </div>
+    </div>
+    <div className='flex items-center justify-center w-[100%] h-[25%]'>
+      <h3> Recherche avancée</h3>
+    </div>
+  </div>)
+}
+
+function Exploration() {
+  return (<>
+  </>)
+}
+
 const router = createBrowserRouter([
   {
-    path: "/",
+    path: home,
     Component: RootLayout,
     children: [
       { index: true, Component: Home },
@@ -342,7 +411,7 @@ const router = createBrowserRouter([
         ],
       },
       {
-        path: "explore",
+        path: explore,
         Component: ExploreLayout,
         children: [
           {
@@ -354,14 +423,14 @@ const router = createBrowserRouter([
             Component: ExploreGalaxy
           },
           {
-            path: "search",
+            path: search,
             loader: async () => {
               return { users: [] };
             },
             Component: ExploreSearch
           },
           {
-            path: "systems/:userId",
+            path: systemsUserId,
             children: [
               {
                 index: true,
@@ -371,7 +440,7 @@ const router = createBrowserRouter([
                 Component: ExploreUserSystem
               },
               {
-                path: "blobs/:blobId",
+                path: blobsBlobId,
                 loader: async () => {
                   return { blob: { id: "blod-id" } };
                 },
@@ -386,7 +455,8 @@ const router = createBrowserRouter([
 ]);
 
 createRoot(document.getElementById('root')).render(
-  <StrictMode>
-    <RouterProvider router={router} />
-  </StrictMode>,
+  // <StrictMode>
+  <RouterProvider router={router} />
+  // <AdvancedSearch />
+  // </StrictMode>,  
 );
